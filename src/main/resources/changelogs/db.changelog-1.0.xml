@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="alexey.smirnov">
+        <createTable tableName="usr">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(32)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(32)"/>
+            <column name="password" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(32)"/>
+            <column name="user_status" type="integer" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="usr" indexName="idx_usr_name">
+            <column name="username"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="2" author="alexey.smirnov">
+        <loadData tableName="usr"
+                  encoding="UTF-8"
+                  file="changelogs/data/1.0/user.csv"
+                  separator=";"
+                  schemaName="public"
+                  catalogName="users-db">
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
