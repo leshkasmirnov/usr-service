@@ -1,5 +1,8 @@
 package com.asmirnov.usrservice.api;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -7,19 +10,28 @@ import javax.validation.constraints.NotNull;
  *
  * Created by a.smirnov19 on 17/08/2017.
  */
+@ApiModel
 public class UserModel {
 
+    @ApiModelProperty
     private Long id;
+    @ApiModelProperty
     @NotNull
     private String username;
+    @ApiModelProperty
     @NotNull
     private String firstName;
+    @ApiModelProperty
     @NotNull
     private String lastName;
+    @ApiModelProperty
     private String email;
+    @ApiModelProperty
     @NotNull
     private String password;
+    @ApiModelProperty
     private String phone;
+    @ApiModelProperty
     private Integer userStatus;
 
     public UserModel() {

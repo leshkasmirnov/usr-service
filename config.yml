@@ -40,7 +40,7 @@ database:
   minIdleTime: 1 minute
 
 logging:
-  level: INFO
+  level: DEBUG
   appenders:
     - type: file
       # The file to which current statements will be logged.

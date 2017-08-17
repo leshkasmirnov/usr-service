@@ -3,10 +3,14 @@ package com.asmirnov.usrservice.resources;
 import com.asmirnov.usrservice.api.UserModel;
 import com.asmirnov.usrservice.core.User;
 import com.asmirnov.usrservice.service.UserService;
+import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -22,12 +26,14 @@ import static com.asmirnov.usrservice.util.ApiUtil.userModelFromUser;
 /**
  * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 16/08/2017.
  */
-@Path("/user")
+@Path("v1/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@PermitAll
+@Api("User API")
 public class UserResource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
+    private final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
     private final UserService userService;
 
@@ -36,15 +42,28 @@ public class UserResource {
         this.userService = userService;
     }
 
+    @RolesAllowed("ADMIN")
     @GET
     @Path("/{name}")
-    public Response getUserByName(@PathParam("name") @NotNull String name) {
+    @ApiOperation("Get user by user name")
+    @ApiResponses({@ApiResponse(code = 400, message = "Invalid username supplied"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 200, message = "successful operation", response = UserModel.class)})
+    @Timed
+    public Response getUserByName(@PathParam("name") @NotNull @ApiParam("The name that needs to be fetched. Use user1 for testing") String name) {
         return doActionWithCheckName(name, null, (username, usr) -> {
         }, true);
     }
 
     @POST
-    public Response createUser(@NotNull @Valid UserModel user) {
+    @ApiOperation("Create user object")
+    @ApiResponses({@ApiResponse(code = 400, message = "Invalid username supplied"),
+            @ApiResponse(code = 200, message = "successful operation")})
+    @Timed
+    public Response createUser(@NotNull @Valid @ApiParam UserModel user) {
+        if (!checkName(user.getUsername())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
         try {
             userService.createUser(userFromUserModel(user));
         } catch (Exception e) {
@@ -56,12 +75,22 @@ public class UserResource {
 
     @PUT
     @Path("/{name}")
+    @ApiOperation("Update user by name")
+    @ApiResponses({@ApiResponse(code = 400, message = "Invalid username supplied"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 200, message = "successful operation")})
+    @Timed
     public Response updateUser(@PathParam("name") @NotNull String name, @NotNull @Valid UserModel user) {
         return doActionWithCheckName(name, user, userService::updateUserByName, false);
     }
 
     @DELETE
     @Path("/{name}")
+    @ApiOperation("Delete user by name")
+    @ApiResponses({@ApiResponse(code = 400, message = "Invalid username supplied"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 200, message = "successful operation")})
+    @Timed
     public Response deleteUserByName(@PathParam("name") @NotNull String name) {
         return doActionWithCheckName(name, null, (username, usr) -> userService.removeByName(username), false);
     }

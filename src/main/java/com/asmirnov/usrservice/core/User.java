@@ -1,11 +1,12 @@
 package com.asmirnov.usrservice.core;
 
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 
 /**
  * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 16/08/2017.
  */
-public class User {
+public class User implements Principal{
 
     private Long id;
     @NotNull
@@ -99,5 +100,10 @@ public class User {
 
     public void setUserStatus(Integer userStatus) {
         this.userStatus = userStatus;
+    }
+
+    @Override
+    public String getName() {
+        return username;
     }
 }

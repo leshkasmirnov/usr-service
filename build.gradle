@@ -36,8 +36,10 @@ dependencies {
     compile group: "io.dropwizard", name: "dropwizard-core", version: "${dropwizardVersion}"
     compile group: "io.dropwizard", name: "dropwizard-jdbi", version: "${dropwizardVersion}"
     compile group: "io.dropwizard", name: "dropwizard-migrations", version: "${dropwizardVersion}"
+    compile group: "io.dropwizard", name: "dropwizard-auth", version: "${dropwizardVersion}"
 
     compile group: "com.hubspot.dropwizard", name: "dropwizard-guice", version: "1.0.6.0"
+    compile group: 'io.paradoxical', name: 'dropwizard-swagger', version: '3.0'
     compile group: "com.google.inject", name: "guice", version: "4.1.0"
     compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 
