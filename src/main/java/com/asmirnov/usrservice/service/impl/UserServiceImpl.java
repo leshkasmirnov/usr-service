@@ -14,7 +14,7 @@ import org.skife.jdbi.v2.DBI;
 @SuppressWarnings("unused")
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
+    private final UserDao userDao;
 
     @Inject
     public UserServiceImpl(DBI dbi) {

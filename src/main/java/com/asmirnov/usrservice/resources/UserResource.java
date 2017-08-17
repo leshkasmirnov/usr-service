@@ -3,6 +3,8 @@ package com.asmirnov.usrservice.resources;
 import com.asmirnov.usrservice.core.User;
 import com.asmirnov.usrservice.service.UserService;
 import com.google.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,6 +22,8 @@ import java.util.regex.Pattern;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
     private final UserService userService;
 
@@ -40,7 +44,7 @@ public class UserResource {
         try {
             userService.createUser(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error in handle request", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.ok().build();
@@ -70,7 +74,7 @@ public class UserResource {
                     }
                     return Response.ok().entity(entity).build();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOG.error("Error in handle request", e);
                     return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
                 }
             } else {
