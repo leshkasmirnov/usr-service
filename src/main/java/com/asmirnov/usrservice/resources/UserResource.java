@@ -1,5 +1,6 @@
 package com.asmirnov.usrservice.resources;
 
+import com.asmirnov.usrservice.api.UserModel;
 import com.asmirnov.usrservice.core.User;
 import com.asmirnov.usrservice.service.UserService;
 import com.google.inject.Inject;
@@ -14,6 +15,9 @@ import javax.ws.rs.core.Response;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.asmirnov.usrservice.util.ApiUtil.userFromUserModel;
+import static com.asmirnov.usrservice.util.ApiUtil.userModelFromUser;
 
 /**
  * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 16/08/2017.
@@ -40,9 +44,9 @@ public class UserResource {
     }
 
     @POST
-    public Response createUser(@NotNull @Valid User user) {
+    public Response createUser(@NotNull @Valid UserModel user) {
         try {
-            userService.createUser(user);
+            userService.createUser(userFromUserModel(user));
         } catch (Exception e) {
             LOG.error("Error in handle request", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -52,8 +56,8 @@ public class UserResource {
 
     @PUT
     @Path("/{name}")
-    public Response updateUser(@PathParam("name") @NotNull String name, @NotNull @Valid User user) {
-        return doActionWithCheckName(name, user, (username, usr) -> userService.updateUserByName(username, user), false);
+    public Response updateUser(@PathParam("name") @NotNull String name, @NotNull @Valid UserModel user) {
+        return doActionWithCheckName(name, user, userService::updateUserByName, false);
     }
 
     @DELETE
@@ -62,15 +66,15 @@ public class UserResource {
         return doActionWithCheckName(name, null, (username, usr) -> userService.removeByName(username), false);
     }
 
-    private Response doActionWithCheckName(String username, User user, BiConsumer<String, User> consumer, boolean putFoundUser) {
+    private Response doActionWithCheckName(String username, UserModel user, BiConsumer<String, User> consumer, boolean putFoundUser) {
         if (checkName(username)) {
             User foundUser = userService.getUserByName(username);
             if (foundUser != null) {
                 try {
-                    consumer.accept(username, user);
+                    consumer.accept(username, userFromUserModel(user));
                     Object entity = null;
                     if (putFoundUser) {
-                        entity = foundUser;
+                        entity = userModelFromUser(foundUser);
                     }
                     return Response.ok().entity(entity).build();
                 } catch (Exception e) {
