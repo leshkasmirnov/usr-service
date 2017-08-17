@@ -55,7 +55,7 @@ logging:
       archivedFileCount: 5
 
       # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
-      timeZone: UTC
+      timeZone: Europe/Moscow
   loggers:
     "com.asmirnov.usrservice.resources.UserResource":
       level: DEBUG
