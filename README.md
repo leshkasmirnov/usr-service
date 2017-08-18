@@ -4,7 +4,7 @@
 * Docker (for postgres)
 * JDK 1.8
 
-##Postgres
+## Postgres
 To start postgres:
 ```
 $ docker build -t asmirnov/postgres .
@@ -24,6 +24,6 @@ To start application:
 $ ./gradlew run
 ```
 
-##URLs
+## URLs
 * Swagger: http://localhost:8080/swagger/ui#/
 * Api: http://localhost:8080/v1/user
