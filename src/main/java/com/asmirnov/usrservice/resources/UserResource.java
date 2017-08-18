@@ -32,7 +32,6 @@ import static com.asmirnov.usrservice.util.ApiUtil.userModelFromUser;
 @Path("v1/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@PermitAll
 @Api("User API")
 public class UserResource {
 
@@ -47,15 +46,16 @@ public class UserResource {
         this.securityService = securityService;
     }
 
-    @RolesAllowed("ADMIN")
     @GET
     @Path("/{name}")
-    @ApiOperation("Get user by user name")
+    @ApiOperation(value = "Get user by user name")
     @ApiResponses({@ApiResponse(code = 400, message = "Invalid username supplied"),
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "successful operation", response = UserModel.class)})
     @Timed
-    public Response getUserByName(@PathParam("name") @NotNull @ApiParam("The name that needs to be fetched. Use user1 for testing") String name) {
+    @PermitAll
+    public Response getUserByName(@PathParam("name") @NotNull @ApiParam("The name that needs to be fetched. Use user1 for testing") String name,
+                                  @QueryParam("access_token") @NotNull String access_token) {
         return doActionWithCheckName(name, null, (username, usr) -> {
         }, true);
     }
@@ -65,7 +65,9 @@ public class UserResource {
     @ApiResponses({@ApiResponse(code = 400, message = "Invalid username supplied"),
             @ApiResponse(code = 200, message = "successful operation")})
     @Timed
-    public Response createUser(@NotNull @Valid @ApiParam UserModel user) {
+    @RolesAllowed("ADMIN")
+    public Response createUser(@NotNull @Valid @ApiParam UserModel user,
+                               @QueryParam("access_token") @NotNull String access_token) {
         if (!checkName(user.getUsername())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -85,7 +87,10 @@ public class UserResource {
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "successful operation")})
     @Timed
-    public Response updateUser(@PathParam("name") @NotNull String name, @NotNull @Valid UserModel user) {
+    @RolesAllowed("ADMIN")
+    public Response updateUser(@PathParam("name") @NotNull String name,
+                               @NotNull @Valid UserModel user,
+                               @QueryParam("access_token") @NotNull String access_token) {
         return doActionWithCheckName(name, user, userService::updateUserByName, false);
     }
 
@@ -96,7 +101,9 @@ public class UserResource {
             @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 200, message = "successful operation")})
     @Timed
-    public Response deleteUserByName(@PathParam("name") @NotNull String name) {
+    @RolesAllowed("ADMIN")
+    public Response deleteUserByName(@PathParam("name") @NotNull String name,
+                                     @QueryParam("access_token") @NotNull String access_token) {
         return doActionWithCheckName(name, null, (username, usr) -> userService.removeByName(username), false);
     }
 

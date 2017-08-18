@@ -1,11 +1,11 @@
 package com.asmirnov.usrservice.service.impl;
 
-import com.asmirnov.usrservice.db.UserDao;
 import com.asmirnov.usrservice.core.User;
+import com.asmirnov.usrservice.db.DaoProvider;
+import com.asmirnov.usrservice.db.UserDao;
 import com.asmirnov.usrservice.service.UserService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.skife.jdbi.v2.DBI;
 
 /**
  * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 16/08/2017
@@ -17,8 +17,8 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Inject
-    public UserServiceImpl(DBI dbi) {
-        userDao = dbi.onDemand(UserDao.class);
+    public UserServiceImpl(DaoProvider daoProvider) {
+        userDao = daoProvider.getDao(UserDao.class);
     }
 
     @Override

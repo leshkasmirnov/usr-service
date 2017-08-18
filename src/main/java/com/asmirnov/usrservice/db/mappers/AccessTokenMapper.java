@@ -16,9 +16,16 @@ public class AccessTokenMapper implements ResultSetMapper<AccessToken> {
     @Override
     public AccessToken map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         AccessToken accessToken = new AccessToken();
-        accessToken.setToken(UUID.fromString(r.getString("access_token")));
+        accessToken.setToken(UUID.fromString(r.getString("token")));
         accessToken.setUserId(r.getLong("user_id"));
         accessToken.setLastAccess(new DateTime(r.getTimestamp("last_access")));
+
+        try {
+            r.findColumn("username");
+            accessToken.setUser(new UserMapper().map(index, r, ctx));
+        } catch (SQLException e) {
+            //do nothing
+        }
         return accessToken;
     }
 }

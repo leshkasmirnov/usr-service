@@ -15,10 +15,16 @@ import java.util.Date;
 @RegisterMapper(AccessTokenMapper.class)
 public interface AccessTokenDao {
 
-    @SqlUpdate("insert into access_token (access_token, user_id, last_access) values (:accessToken, :userId, :lastAccess)")
+    @SqlUpdate("insert into access_token (token, user_id, last_access) values (:accessToken, :userId, :lastAccess)")
     void insertAccessToken(@Bind("accessToken") String accessToken, @Bind("userId") Long userId, @Bind("lastAccess") Date lastAccess);
+
+    @SqlUpdate("update access_token set last_access = :lastAccess where token = :accessToken")
+    void updateAccessTokenLastAccess(@Bind("accessToken") String accessToken, @Bind("lastAccess") Date lastAccess);
 
     @SqlQuery("select * from access_token where user_id = :userId")
     AccessToken getAccessTokenByUserId(@Bind("userId") Long userId);
+
+    @SqlQuery("select t.*, u.* from access_token t join usr u on u.id = t.user_id where t.token = :token")
+    AccessToken getAccessTokenByToken(@Bind("token") String token);
 
 }

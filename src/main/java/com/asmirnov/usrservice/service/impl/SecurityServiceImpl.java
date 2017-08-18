@@ -3,10 +3,11 @@ package com.asmirnov.usrservice.service.impl;
 import com.asmirnov.usrservice.core.AccessToken;
 import com.asmirnov.usrservice.core.User;
 import com.asmirnov.usrservice.db.AccessTokenDao;
+import com.asmirnov.usrservice.db.DaoProvider;
 import com.asmirnov.usrservice.db.UserDao;
 import com.asmirnov.usrservice.service.SecurityService;
+import com.google.inject.Inject;
 import org.joda.time.DateTime;
-import org.skife.jdbi.v2.DBI;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,9 +20,10 @@ public class SecurityServiceImpl implements SecurityService {
     private final UserDao userDao;
     private final AccessTokenDao accessTokenDao;
 
-    public SecurityServiceImpl(DBI dbi) {
-        userDao = dbi.onDemand(UserDao.class);
-        accessTokenDao = dbi.onDemand(AccessTokenDao.class);
+    @Inject
+    public SecurityServiceImpl(DaoProvider daoProvider) {
+        userDao = daoProvider.getDao(UserDao.class);
+        accessTokenDao = daoProvider.getDao(AccessTokenDao.class);
     }
 
     @Override
