@@ -51,6 +51,12 @@ task oneJar(type: OneJar) {
     mainClass = mainClassName
 }
 
+task dbMigrate(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = mainClassName
+    args 'db', 'migrate', './config.yml'
+}
+
 // Configure the run task to start the Dropwizard service
 run {
     args 'server', './config.yml'
