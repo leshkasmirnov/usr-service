@@ -27,3 +27,7 @@ $ ./gradlew run
 ## URLs
 * Swagger: http://localhost:8080/swagger/ui#/
 * Api: http://localhost:8080/v1/user
+
+## Users
+* admin/123456 with ADMIN role (all actions are accessible)
+* user/123456 without ADMIN role (only get user ba name action is accessible)
