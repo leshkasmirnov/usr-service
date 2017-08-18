@@ -21,6 +21,9 @@ public interface AccessTokenDao {
     @SqlUpdate("update access_token set last_access = :lastAccess where token = :accessToken")
     void updateAccessTokenLastAccess(@Bind("accessToken") String accessToken, @Bind("lastAccess") Date lastAccess);
 
+    @SqlUpdate("delete from access_token where user_id = :userId")
+    void deleteByUserId(@Bind("userId") Long userId);
+
     @SqlQuery("select * from access_token where user_id = :userId")
     AccessToken getAccessTokenByUserId(@Bind("userId") Long userId);
 

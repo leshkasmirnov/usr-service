@@ -1,6 +1,7 @@
 package com.asmirnov.usrservice.service;
 
 import com.asmirnov.usrservice.core.AccessToken;
+import com.asmirnov.usrservice.core.User;
 import com.asmirnov.usrservice.service.impl.SecurityServiceImpl;
 import com.google.inject.ImplementedBy;
 
@@ -25,7 +26,7 @@ public interface SecurityService {
     /**
      * Log user out from system.
      *
-     * @param username
+     * @param user
      */
-    void logout(String username);
+    void logout(User user);
 }

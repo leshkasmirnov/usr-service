@@ -1,6 +1,7 @@
 package com.asmirnov.usrservice.resources;
 
 import com.asmirnov.usrservice.api.UserModel;
+import com.asmirnov.usrservice.api.UserToken;
 import com.asmirnov.usrservice.core.AccessToken;
 import com.asmirnov.usrservice.core.User;
 import com.asmirnov.usrservice.service.SecurityService;
@@ -16,8 +17,10 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
@@ -111,13 +114,27 @@ public class UserResource {
     @Path("/login")
     @ApiOperation("Log user into the system")
     @ApiResponses({@ApiResponse(code = 400, message = "Invalid username/password supplied"),
-            @ApiResponse(code = 200, message = "successful operation")})
+            @ApiResponse(code = 200, message = "successful operation", response = UserToken.class)})
     @Timed
     public Response login(@QueryParam("username") @ApiParam("The user name for login") String username,
                           @QueryParam("password") @ApiParam("The password for login in clear text") String password) {
         Optional<AccessToken> accessToken = securityService.login(username, password);
         if (accessToken.isPresent()) {
-            return Response.ok(accessToken.get().getToken().toString()).build();
+            return Response.ok(new UserToken(accessToken.get().getToken().toString())).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+
+    @GET
+    @Path("/logout")
+    @ApiOperation("Logs out current logged in user session")
+    @Timed
+    @PermitAll
+    public Response logout(@Context SecurityContext context,
+                           @QueryParam("access_token") @NotNull String access_token) {
+        if (context.getUserPrincipal() != null) {
+            securityService.logout((User) context.getUserPrincipal());
+            return Response.ok().build();
         }
         return Response.status(Response.Status.BAD_REQUEST).build();
     }

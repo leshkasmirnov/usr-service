@@ -40,8 +40,8 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public void logout(String username) {
-
+    public void logout(User user) {
+        accessTokenDao.deleteByUserId(user.getId());
     }
 
     private Optional<AccessToken> generateAccessToken(User user) {
