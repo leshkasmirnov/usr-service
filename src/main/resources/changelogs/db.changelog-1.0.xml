@@ -32,19 +32,7 @@
         <createIndex tableName="usr" indexName="idx_usr_name">
             <column name="username"/>
         </createIndex>
-    </changeSet>
 
-    <changeSet id="2" author="alexey.smirnov">
-        <loadData tableName="usr"
-                  encoding="UTF-8"
-                  file="changelogs/data/1.0/user.csv"
-                  separator=";"
-                  schemaName="public"
-                  catalogName="users-db">
-        </loadData>
-    </changeSet>
-
-    <changeSet id="3" author="alexey.smirnov">
         <createTable tableName="access_token">
             <column name="token" type="varchar(36)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -56,5 +44,57 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <createTable tableName="role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="rolename" type="varchar(10)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="usr_role">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="usr_role"
+                                 baseColumnNames="user_id"
+                                 constraintName="usr_role_usr"
+                                 referencedTableName="usr"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="usr_role"
+                                 baseColumnNames="role_id"
+                                 constraintName="usr_role_role"
+                                 referencedTableName="role"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="2" author="alexey.smirnov">
+        <loadData tableName="usr"
+                  encoding="UTF-8"
+                  file="changelogs/data/1.0/user.csv"
+                  separator=";"
+                  schemaName="public"
+                  catalogName="users-db">
+        </loadData>
+        <loadData tableName="role"
+                  encoding="UTF-8"
+                  file="changelogs/data/1.0/role.csv"
+                  separator=";"
+                  schemaName="public"
+                  catalogName="users-db">
+        </loadData>
+        <loadData tableName="usr_role"
+                  encoding="UTF-8"
+                  file="changelogs/data/1.0/user_role.csv"
+                  separator=";"
+                  schemaName="public"
+                  catalogName="users-db">
+        </loadData>
     </changeSet>
 </databaseChangeLog>
