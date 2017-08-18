@@ -8,7 +8,7 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import java.util.Optional;
 
 /**
- * Created by a.smirnov19 on 17/08/2017.
+ * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 17/08/2017.
  */
 public class SimpleAuthenticator implements Authenticator<BasicCredentials, User> {
 

@@ -43,4 +43,18 @@
                   catalogName="users-db">
         </loadData>
     </changeSet>
+
+    <changeSet id="3" author="alexey.smirnov">
+        <createTable tableName="access_token">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="last_access" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

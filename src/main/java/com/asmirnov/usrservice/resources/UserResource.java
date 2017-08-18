@@ -1,7 +1,9 @@
 package com.asmirnov.usrservice.resources;
 
 import com.asmirnov.usrservice.api.UserModel;
+import com.asmirnov.usrservice.core.AccessToken;
 import com.asmirnov.usrservice.core.User;
+import com.asmirnov.usrservice.service.SecurityService;
 import com.asmirnov.usrservice.service.UserService;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,10 +39,12 @@ public class UserResource {
     private final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
     private final UserService userService;
+    private final SecurityService securityService;
 
     @Inject
-    public UserResource(UserService userService) {
+    public UserResource(UserService userService, SecurityService securityService) {
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     @RolesAllowed("ADMIN")
@@ -93,6 +98,21 @@ public class UserResource {
     @Timed
     public Response deleteUserByName(@PathParam("name") @NotNull String name) {
         return doActionWithCheckName(name, null, (username, usr) -> userService.removeByName(username), false);
+    }
+
+    @GET
+    @Path("/login")
+    @ApiOperation("Log user into the system")
+    @ApiResponses({@ApiResponse(code = 400, message = "Invalid username/password supplied"),
+            @ApiResponse(code = 200, message = "successful operation")})
+    @Timed
+    public Response login(@QueryParam("username") @ApiParam("The user name for login") String username,
+                          @QueryParam("password") @ApiParam("The password for login in clear text") String password) {
+        Optional<AccessToken> accessToken = securityService.login(username, password);
+        if (accessToken.isPresent()) {
+            return Response.ok(accessToken.get().getToken().toString()).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
     private Response doActionWithCheckName(String username, UserModel user, BiConsumer<String, User> consumer, boolean putFoundUser) {
