@@ -10,7 +10,7 @@ import org.skife.jdbi.v2.DBI;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Created by a.smirnov19 on 18/08/2017.
+ * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 18/08/2017.
  */
 @Singleton
 @Provider

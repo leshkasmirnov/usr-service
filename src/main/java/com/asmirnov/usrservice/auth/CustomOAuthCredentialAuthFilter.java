@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.security.Principal;
 
 /**
- * Created by a.smirnov19 on 18/08/2017.
+ * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 18/08/2017.
  */
 @Singleton
 @Priority(Priorities.AUTHENTICATION)

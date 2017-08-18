@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Optional;
 
 /**
- * Created by a.smirnov19 on 18/08/2017.
+ * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 18/08/2017.
  */
 @Singleton
 public class TokenAuthenticator implements Authenticator<String, User> {

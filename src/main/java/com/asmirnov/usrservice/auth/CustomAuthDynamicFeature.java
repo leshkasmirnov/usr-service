@@ -6,7 +6,7 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import javax.ws.rs.ext.Provider;
 
 /**
- * Created by a.smirnov19 on 18/08/2017.
+ * Created by Alexey Smirnov (aleksey.smirnov89@gmail.com) on 18/08/2017.
  */
 @Provider
 public class CustomAuthDynamicFeature extends AuthDynamicFeature {
