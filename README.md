@@ -8,11 +8,7 @@
 To start postgres:
 ```
 $ docker build -t asmirnov/postgres .
-$ docker run --name postgres \
-    -p 5432:5432 \
-    -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password \
-    -d \
-    asmirnov/postgres
+$ docker run --name postgres -p 5432:5432 -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -d asmirnov/postgres
 
 ```
 To migrate database:
