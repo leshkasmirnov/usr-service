@@ -25,8 +25,8 @@ $ ./gradlew run
 ```
 
 ## URLs
-* Swagger: http://localhost:8080/swagger/ui#/
-* Api: http://localhost:8080/v1/user
+* Swagger: http://localhost:9000/swagger/ui#/
+* Api: http://localhost:9000/v1/user
 
 ## Users
 * admin/123456 with ADMIN role (all actions are accessible)
