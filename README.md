@@ -1,5 +1,7 @@
 # Aleksey Smirnov
 
+[![Build Status](https://travis-ci.org/leshkasmirnov/usr-service.svg?branch=master)](https://travis-ci.org/leshkasmirnov/usr-service)
+
 ## Development Requirements
 * Docker (for postgres)
 * JDK 1.8
